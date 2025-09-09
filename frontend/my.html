@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Praneetha Bandi | Portfolio</title>
+  <style>
+    /* ===== RESET ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: #fefefe;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ===== HEADER / HERO ===== */
+    header {
+      height: 100vh;
+      background: linear-gradient(to right, #4CAF50, #2E7D32);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      background: white;
+      color: #2E7D32;
+      padding: 10px 25px;
+      border-radius: 25px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #2E7D32;
+      color: white;
+    }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(34, 34, 34, 0.9);
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      z-index: 1000;
+    }
+
+    nav a {
+      color: white;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #4CAF50;
+    }
+
+    /* ===== SECTIONS ===== */
+    section {
+      padding: 80px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    section h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      color: #2E7D32;
+    }
+
+    /* About */
+    .about p {
+      text-align: center;
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    /* Skills */
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .skill {
+      background: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .skill:hover {
+      background: #2E7D32;
+    }
+
+    /* Projects */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .project {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .project:hover {
+      transform: translateY(-5px);
+    }
+
+    .project h3 {
+      margin-bottom: 10px;
+      color: #2E7D32;
+    }
+
+    /* Contact */
+    .contact p {
+      text-align: center;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .contact a {
+      color: #2E7D32;
+      font-weight: bold;
+    }
+
+    /* Footer */
+    footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+      margin-top: 20px;
+    }
+
+    footer a {
+      color: #4CAF50;
+      margin: 0 10px;
+      transition: 0.3s;
+    }
+
+    footer a:hover {
+      color: #81C784;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <!-- Hero -->
+  <header>
+    <h1>Hi, I'm Praneetha Bandi 👋</h1>
+    <p>Aspiring Web Developer | Designer | Programmer</p>
+    <a href="#contact" class="btn">Hire Me</a>
+  </header>
+
+  <!-- About -->
+  <section id="about" class="about">
+    <h2>About Me</h2>
+    <p>
+      I’m Praneetha, a passionate developer who loves creating functional and
+      beautiful websites. I enjoy solving problems, learning new technologies,
+      and working on meaningful projects that make an impact.
+    </p>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" class="skills">
+    <h2>Skills</h2>
+    <div class="skills-list">
+      <span class="skill">HTML</span>
+      <span class="skill">CSS</span>
+      <span class="skill">JavaScript</span>
+      <span class="skill">React</span>
+      <span class="skill">Python</span>
+      <span class="skill">Java</span>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="projects">
+    <h2>Projects</h2>
+    <div class="projects-grid">
+      <div class="project">
+        <h3>Portfolio Website</h3>
+        <p>A personal portfolio showcasing my skills, projects, and contact info.</p>
+      </div>
+      <div class="project">
+        <h3>DocSpot</h3>
+        <p>A seamless appointment booking platform for healthcare (full-stack project).</p>
+        <a href="https://github.com/praneetha-bandi/Docspot.git" target="_blank">View on GitHub</a>
+      </div>
+      <div class="project">
+        <h3>Creative Writing App</h3>
+        <p>An app for writers & readers with publishing, contests, and live sessions.</p>
+        <a href="https://github.com/praneetha-bandi/pencraft.git" target="_blank">View on GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="contact">
+    <h2>Contact</h2>
+    <p>Email: <a href="mailto:praneetha16@gmail.com?subject=Portfolio Inquiry&body=Hello,...">bandipraneetha16@gmail.com</a>
+    <p>LinkedIn: <a href="https://www.linkedin.com/in/bandi-praneetha" target="_blank">linkedin.com/in/bandi-praneetha</a></p>
+    <p>GitHub: <a href="https://github.com/praneetha-bandi" target="_blank">github.com/praneetha-bandi</a></p>
+    <p>Instagram: <a href="https://www.instagram.com/graywrites_" target="_blank">graywrites_</a></p>
+</section>
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Praneetha Bandi | Built with ❤️ using HTML & CSS</p>
+    <p>
+      <a href="https://www.linkedin.com/in/bandi-praneetha" target="_blank">LinkedIn</a> |
+      <a href="https://github.com/praneetha-bandi" target="_blank">GitHub</a>
+      <a href="https://www.instagram.com/graywrites_" target="_blank">Instagram</a>
+    </p>
+  </footer>
+
+</body>
+</html>
