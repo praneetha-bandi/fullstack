@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IRCTC — Demo</title>
+  <meta name="description" content="IRCTC-style demo UI for train search & booking (frontend only)">
+
+  <!-- favicon (emoji) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%F0%9F%9A%9E%3C/text%3E%3C/svg%3E">
+
+  <style>
+    :root{
+      --brand:#0a58ca;
+      --muted:#6b7280;
+      --card:#ffffff;
+      --bg:#f3f4f6;
+      --radius:10px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:#111827;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* Header / Nav */
+    header{
+      background:linear-gradient(90deg,var(--brand),#2563eb);
+      color:white;
+      padding:12px 18px;
+      display:flex;
+      align-items:center;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:700;
+      font-size:18px;
+    }
+    .logo .mark{
+      width:40px;height:40px;border-radius:8px;background:white;color:var(--brand);
+      display:grid;place-items:center;font-weight:800;
+    }
+    nav{margin-left:auto; display:flex; gap:12px; align-items:center;}
+    nav a{color:rgba(255,255,255,0.95); text-decoration:none; padding:8px 12px; border-radius:8px; font-weight:600}
+    nav a:hover{background:rgba(255,255,255,0.12)}
+
+    /* Main container */
+    .container{
+      max-width:1100px;
+      margin:22px auto;
+      padding:0 18px;
+    }
+
+    /* Search card */
+    .search-card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:0 6px 18px rgba(15,23,42,0.06);
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap:12px;
+      align-items:center;
+    }
+
+    .field{display:flex;flex-direction:column; gap:6px}
+    label{font-size:13px;color:var(--muted)}
+    input[type="text"], input[type="date"], select{
+      padding:10px 12px;border-radius:8px;border:1px solid #e6e7eb;font-size:14px;
+      background:#fff;outline:none;
+    }
+    .swap-btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      background:#eef2ff;border-radius:8px;padding:8px;border:1px solid #e6e7eb; cursor:pointer;
+    }
+
+    .actions{display:flex; gap:10px; align-items:center}
+    .btn{
+      padding:10px 16px;border-radius:8px;border:none;cursor:pointer;font-weight:700;
+    }
+    .btn.primary{background:var(--brand); color:white}
+    .btn.ghost{background:transparent;border:1px solid #e6e7eb}
+
+    /* Results layout */
+    .results{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:18px;
+      margin-top:18px;
+    }
+    .list{
+      display:flex;flex-direction:column;gap:12px;
+    }
+    .train-card{
+      background:var(--card);border-radius:10px;padding:14px;border:1px solid #f0f0f3;
+      display:flex;gap:14px;align-items:center;justify-content:space-between;
+    }
+    .train-info{display:flex;gap:12px;align-items:center}
+    .train-name{font-weight:700}
+    .train-meta{color:var(--muted);font-size:13px}
+
+    .sidecard{
+      background:var(--card);padding:14px;border-radius:10px;border:1px solid #f0f0f3;
+    }
+
+    /* Footer */
+    footer{margin:28px auto;text-align:center;color:var(--muted);font-size:14px;padding:18px 0}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .search-card{grid-template-columns:1fr 1fr; grid-auto-rows:auto;}
+      .actions{grid-column:span 2; justify-content:flex-end}
+      .results{grid-template-columns:1fr}
+    }
+    @media (max-width:480px){
+      nav{display:none}
+      header{padding:12px}
+      .search-card{gap:8px}
+      .actions{justify-content:stretch;flex-direction:column}
+      .actions .btn{width:100%}
+    }
+
+    /* small helpers */
+    .muted{color:var(--muted);font-size:13px}
+    .small{font-size:13px;color:var(--muted)}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <div class="mark">IR</div>
+      <div>
+        IRCTC Demo
+        <div class="small" style="font-weight:400">Train search & booking (UI only)</div>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Trains</a>
+      <a href="#">Bookings</a>
+      <a href="#" id="openLogin">Login</a>
+      <a href="#" class="btn ghost" style="color:white;border-color:rgba(255,255,255,0.18)">Sign up</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Search card -->
+    <section class="search-card" aria-label="Search trains">
+      <div class="field">
+        <label for="from">From</label>
+        <input id="from" type="text" placeholder="e.g. Bangalore (SBC)" value="Bangalore">
+      </div>
+
+      <div class="field">
+        <label for="to">To</label>
+        <input id="to" type="text" placeholder="e.g. Chennai (MAS)" value="Chennai">
+      </div>
+
+      <div class="field">
+        <label for="date">Date</label>
+        <input id="date" type="date" value="">
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:center">
+        <div class="field" style="min-width:140px">
+          <label for="class">Class</label>
+          <select id="class" aria-label="Travel class">
+            <option>2A - AC 2 Tier</option>
+            <option>3A - AC 3 Tier</option>
+            <option>SL - Sleeper</option>
+            <option>CC - Chair Car</option>
+          </select>
+        </div>
+
+        <div class="actions" style="margin-left:8px">
+          <button class="btn" id="swap" title="swap from/to" aria-label="Swap from and to">
+            <span class="swap-btn">↔</span>
+          </button>
+          <button class="btn primary" id="searchBtn">Search Trains</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="results" aria-live="polite">
+      <div class="list" id="resultsList">
+        <!-- JS will inject train cards here -->
+      </div>
+
+      <aside class="sidecard">
+        <h4>Quick tips</h4>
+        <ul class="small">
+          <li>Choose date carefully — availability varies by day.</li>
+          <li>Use PNR & Booking history after login.</li>
+          <li>This demo only shows frontend layout; connect to an API for real data.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <footer>
+      © <span id="year"></span> IRCTC Demo — This is a UI prototype only.
+    </footer>
+  </main>
+
+  <!-- Login modal (simple) -->
+  <div id="loginModal" aria-hidden="true" style="position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,0.45);">
+    <div style="width:360px;background:white;padding:18px;border-radius:12px;box-shadow:0 10px 30px rgba(2,6,23,0.4);">
+      <h3 style="margin:0 0 8px 0">Login</h3>
+      <p class="small" style="margin:0 0 12px 0">Enter demo credentials</p>
+      <label class="small">Email</label>
+      <input id="loginEmail" type="text" style="width:100%;padding:8px;margin-bottom:8px;border-radius:8px;border:1px solid #e6e7eb">
+      <label class="small">Password</label>
+      <input id="loginPass" type="password" style="width:100%;padding:8px;margin-bottom:12px;border-radius:8px;border:1px solid #e6e7eb">
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button id="closeModal" class="btn ghost">Cancel</button>
+        <button id="doLogin" class="btn primary">Login</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // small helpers for demo
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // default date = tomorrow
+    const dateInput = document.getElementById('date');
+    const tomorrow = new Date(Date.now() + 24*60*60*1000);
+    dateInput.valueAsDate = tomorrow;
+
+    // swap from/to
+    document.getElementById('swap').addEventListener('click', (e)=>{
+      e.preventDefault();
+      const f = document.getElementById('from');
+      const t = document.getElementById('to');
+      [f.value, t.value] = [t.value, f.value];
+    });
+
+    // login modal
+    const loginModal = document.getElementById('loginModal');
+    document.getElementById('openLogin').addEventListener('click', (ev)=>{
+      ev.preventDefault();
+      loginModal.style.display = 'grid';
+      loginModal.setAttribute('aria-hidden','false');
+    });
+    document.getElementById('closeModal').addEventListener('click', ()=>{
+      loginModal.style.display = 'none';
+      loginModal.setAttribute('aria-hidden','true');
+    });
+    document.getElementById('doLogin').addEventListener('click', ()=>{
+      alert('Demo login — no backend. Use this UI with your auth API.');
+      loginModal.style.display = 'none';
+    });
+
+    // simulate search results
+    const sampleTrains = [
+      {no:'12677', name:'Bengaluru Express', depart:'06:30', arrive:'12:15', dur:'5h 45m', classes:['2A','3A','SL']},
+      {no:'12678', name:'Chennai Superfast', depart:'09:20', arrive:'15:10', dur:'5h 50m', classes:['1A','2A','3A','CC']},
+      {no:'16525', name:'InterCity Express', depart:'13:00', arrive:'18:30', dur:'5h 30m', classes:['3A','SL']},
+    ];
+
+    function renderResults(source, dest, date, cls){
+      const list = document.getElementById('resultsList');
+      list.innerHTML = ''; // clear
+      // in real app: call API with params and render results
+      const heading = document.createElement('div');
+      heading.className = 'small muted';
+      heading.textContent = `Trains from ${source} → ${dest} on ${date} · Class: ${cls}`;
+      list.appendChild(heading);
+
+      // simple filter demo: show all sample trains
+      sampleTrains.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'train-card';
+        card.innerHTML = `
+          <div class="train-info">
+            <div style="min-width:78px">
+              <div style="font-weight:800">${t.no}</div>
+              <div class="train-meta">${t.name}</div>
+            </div>
+            <div>
+              <div style="font-weight:700">${t.depart} → ${t.arrive}</div>
+              <div class="train-meta">${t.dur}</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+            <div class="muted">Classes: ${t.classes.join(', ')}</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn ghost" style="padding:8px 10px" onclick="viewDetails('${t.no}')">Details</button>
+              <button class="btn primary" style="padding:8px 10px" onclick="book('${t.no}')">Book</button>
+            </div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    document.getElementById('searchBtn').addEventListener('click', (ev)=>{
+      ev.preventDefault();
+      const from = document.getElementById('from').value || 'Unknown';
+      const to = document.getElementById('to').value || 'Unknown';
+      const date = document.getElementById('date').value || 'Unknown';
+      const cls = document.getElementById('class').value || '';
+      renderResults(from, to, date, cls);
+      // scroll to results
+      window.scrollTo({top: document.getElementById('resultsList').offsetTop - 20, behavior:'smooth'});
+    });
+
+    // details/book handlers
+    function viewDetails(no){
+      alert('Show details for train '+no+' (connect to API to fetch real details)');
+    }
+    function book(no){
+      alert('Proceed to booking for train '+no+' (this demo has no payment flow)');
+    }
+
+    // initial render
+    renderResults('Bangalore','Chennai',dateInput.value, document.getElementById('class').value);
+  </script>
+</body>
+</html>
