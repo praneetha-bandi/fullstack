@@ -70,7 +70,7 @@
 
 
 
-//oredefined city -> coordinates
+// Predefined city coordinates
 const cityCoords = {
     "bangalore": { lat: 12.97, lon: 77.59 },
     "delhi": { lat: 28.61, lon: 77.23 },
@@ -79,35 +79,38 @@ const cityCoords = {
     "new york": { lat: 40.71, lon: -74.01 }
 };
 
-// Event listener for button
-document.getElementById("fetchBtn").addEventListener("click", () => {
-    let city = document.getElementById("cityInput").value.toLowerCase();
+// Event listener for button using jQuery
+$(document).ready(function() {
+    $("#fetchBtn").click(function() {
+        let city = $("#cityInput").val().toLowerCase();
 
-    if (!cityCoords[city]) {
-        document.getElementById("Weather").innerHTML = "⚠️ City not in list!";
-        return;
-    }
+        if (!cityCoords[city]) {
+            $("#Weather").html("⚠️ City not in list!");
+            return;
+        }
 
-    let coords = cityCoords[city];
-    let url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current_weather=true`;
+        let coords = cityCoords[city];
+        let url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current_weather=true`;
 
-    // AJAX Fetch
-    fetch(url)
-        .then(res => res.json())
-        .then(data => {
-            if (data.current_weather) {
-                document.getElementById("Weather").innerHTML = `
-                    <h3>Weather in ${city}</h3>
-                    <p>🌡️ Temp: ${data.current_weather.temperature}°C</p>
-                    <p>🍃 Wind: ${data.current_weather.windspeed} km/h</p>
-                    <p>⏲️ Time: ${data.current_weather.time}</p>
-                `;
-            } else {
-                document.getElementById("Weather").innerHTML = "⚠️ Weather data not available!";
+        // jQuery AJAX
+        $.ajax({
+            url: url,
+            method: "GET",
+            success: function(data) {
+                if (data.current_weather) {
+                    $("#Weather").html(`
+                        <h3>Weather in ${city}</h3>
+                        <p>🌡️ Temp: ${data.current_weather.temperature}°C</p>
+                        <p>🍃 Wind: ${data.current_weather.windspeed} km/h</p>
+                        <p>⏲️ Time: ${data.current_weather.time}</p>
+                    `);
+                } else {
+                    $("#Weather").html("⚠️ Weather data not available!");
+                }
+            },
+            error: function() {
+                $("#Weather").html("⚠️ Error fetching weather data!");
             }
-        })
-        .catch(err => {
-            console.error(err);
-            document.getElementById("Weather").innerHTML = "⚠️ Error fetching weather data!";
         });
+    });
 });

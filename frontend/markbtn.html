@@ -1,0 +1,87 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>Easy Task Marker</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .completed {
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>My Tasks</h2>
+
+  <p class="task">📝 Task 1 <button class="done">Mark as Done</button></p>
+  <p class="task">📝 Task 2 <button class="done">Mark as Done</button></p>
+  <p class="task">📝 Task 3 <button class="done">Mark as Done</button></p>
+
+  <script>
+    $(document).ready(function() {
+      $(".done").click(function() {
+        $(this).parent().toggleClass("completed");
+        $(this).text(
+          $(this).text() === "Mark as Done" ? "Undo" : "Mark as Done"
+        );
+      });
+    });
+  </script>
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Basic Task App</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .completed {
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+
+  <h3>My Tasks</h3>
+
+  <input type="text" id="taskInput" placeholder="Enter task">
+  <button id="addBtn">Add Task</button>
+
+  <div id="taskList">
+    <!-- Tasks will appear here -->
+  </div>
+
+  <script>
+    // Add task
+    $('#addBtn').click(function() {
+      var task = $('#taskInput').val().trim();
+      if (task !== '') {
+        $('#taskList').append(
+          '<p>' + task +
+          ' <button class="done">Done</button>' +
+          ' <button class="remove">Remove</button>' +
+          '</p>'
+        );
+        $('#taskInput').val('');
+      }
+    });
+
+    // Mark as done
+    $(document).on('click', '.done', function() {
+      $(this).parent().toggleClass('completed');
+    });
+
+    // Remove task
+    $(document).on('click', '.remove', function() {
+      $(this).parent().remove();
+    });
+  </script>
+
+</body>
+</html>
+
+
+
